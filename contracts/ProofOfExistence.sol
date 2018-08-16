@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+  pragma solidity ^0.4.24;
 
 contract ProofOfExistence {
 
@@ -6,7 +6,7 @@ contract ProofOfExistence {
     mapping(bytes32 => bytes32) tags;
 
     function createProof(bytes32 _item, bytes32 _tags) {
-        require (proofs[_item] == 0);
+        require (proofs[_item] == 0, 'This item is already in the registry');
         proofs[_item] = block.number;
         tags[_item] = _tags;
         emit LogProof(_item, block.number);
