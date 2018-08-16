@@ -28,7 +28,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Full Stack Ethereum DApp using uPort and IPFS</h1>
+          <h1 className="App-title">Proof of Existence - Ferit Tunçer</h1>
           {this.state.avatar &&
             <React.Fragment>
               <div className="avatar">
