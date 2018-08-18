@@ -1,21 +1,30 @@
   pragma solidity ^0.4.24;
 
 contract ProofOfExistence {
+    uint[] public timestamps;
 
-    mapping(bytes32 => uint) proofs;
-    mapping(bytes32 => bytes32) tags;
+    mapping(uint => bytes32) public idToHash;
+    mapping(bytes32 => uint) public hashToTimestamp;
+    mapping(bytes32 => bytes32) public hashToTags;
+    mapping(address => uint[]) public userToIds;
 
-    function createProof(bytes32 _item, bytes32 _tags) {
-        require (proofs[_item] == 0, 'This item is already in the registry');
-        proofs[_item] = block.number;
-        tags[_item] = _tags;
-        emit LogProof(_item, block.number);
+    function timestamp(bytes32 _hash, bytes32 _tags) returns (uint) {
+        require (getTimestamp(_hash) == 0, 'This hash is already timestamped.');
+        uint id = timestamps.push(block.timestamp) -1;
+
+        idToHash[id] = _hash;
+        hashToTimestamp[_hash] = timestamps[id];
+        hashToTags[_hash] = _tags;
+        userToIds[msg.sender].push(id);
+
+        return id;
     }
 
-    function checkProof(bytes32 _item) constant returns (uint) {
-        emit CheckProof(_item, proofs[_item]);
-        return proofs[_item];
+    function getTimestamp(bytes32 _hash) constant returns (uint) {
+        return hashToTimestamp[_hash];
     }
+
+
 
     event LogProof(bytes32 _item, uint _blockNumber);
 
