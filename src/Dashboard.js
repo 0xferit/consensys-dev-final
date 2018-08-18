@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { setJSON, getJSON } from './util/IPFS.js'
 import { Col, Form, Button, FormControl } from 'react-bootstrap';
 import Loader from "./Loader"
-import { setContractHash, getContractHash } from './services/DetailsService';
+import { timestamp, getTimestamp, getHash, getTags, getIds } from './services/ProofOfExistenceService';
 
 export class Dashboard extends Component {
     constructor() {
@@ -18,11 +18,13 @@ export class Dashboard extends Component {
         this.fetchData()
     }
     handleSubmit = async (e) => {
+        console.log("handleSubmit");
         e.preventDefault();
         this.setState({ loading: true });
         const hash = await setJSON({ myData: this.state.myData });
+        console.log("hash: " + hash);
         try {
-            await setContractHash(this.props.specificNetworkAddress, hash);
+            await timestamp(hash, "", this.props.specificNetworkAddress);
         } catch (error) {
             this.setState({ loading: false });
             alert("There was an error with the transaction.");
@@ -31,16 +33,21 @@ export class Dashboard extends Component {
         this.fetchData();
     }
     fetchData = async () => {
+        console.log("fetchData");
         //first get hash from smart contract
-        const contractDetails = await getContractHash(this.props.specificNetworkAddress);
+        console.log(this.props.specificNetworkAddress);
+        const ids = await getIds(this.props.specificNetworkAddress, 0);
+        const hash0 = await getHash(ids);
         //then get data off IPFS
-        const ipfsHash = contractDetails[0];
+        const ipfsHash = hash0;
+        console.log("hash0: " + hash0);
         if (!ipfsHash) { return }
-        const timestamp = contractDetails[1].c[0];
+        const timestamp = await getTimestamp(hash0);
         const details = await getJSON(ipfsHash);
         this.setState({ ipfsData: details, loading: false, timestamp })
     }
     handleMyData = (e) => {
+        console.log("handleMyData");
         this.setState({ myData: e.target.value });
     }
 

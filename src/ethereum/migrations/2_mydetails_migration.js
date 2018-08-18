@@ -1,5 +1,5 @@
-var Mydetails = artifacts.require("./MyDetails.sol");
+var ProofOfExistence = artifacts.require("./ProofOfExistence.sol");
 
 module.exports = function (deployer) {
-  deployer.deploy(Mydetails);
+  deployer.deploy(ProofOfExistence);
 };

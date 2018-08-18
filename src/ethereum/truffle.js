@@ -8,12 +8,12 @@ module.exports = {
     rinkeby: {
       provider: new HDWalletProvider(
         mnemonic,
-        'https://rinkeby.infura.io/XAmfM8SVSh5OkuiYMIBx',
+        'https://rinkeby.infura.io/v3/344bdb3c652c4ce6acc12f10a7557ba6',
         1
       ),
       network_id: 5,
       gas: 6712388,
-      gasPrice: 10000000
+      gasPrice: 2000000000
     },
   },
 };

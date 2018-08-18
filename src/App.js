@@ -29,8 +29,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Proof of Existence</h1>
-          <h2 className="App-title">ConsenSys Academy Final Project</h2>
-          <h3 className="App-title">Ferit Tunçer</h3>
+          <h1 className="App-title">Ferit Tunçer</h1>
           {this.state.avatar &&
             <React.Fragment>
               <div className="avatar">
