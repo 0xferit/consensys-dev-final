@@ -34,8 +34,14 @@ export const getTags = async (hash) => {
   return items;
 }
 
-export const getIds = async (account) => {
+export const getId = async (account, index) => {
   const instance = await getInstance();
-  const items = await instance.userToIds(account, 0);
+  const items = await instance.userToIds(account, index);
+  return items;
+}
+
+export const getAllIds = async (account) => {
+  const instance = await getInstance();
+  const items = await instance.getAllIds(account);
   return items;
 }

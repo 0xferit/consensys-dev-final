@@ -21,4 +21,8 @@ contract ProofOfExistence {
         return id;
     }
 
+    function getAllIds(address user) public constant returns (uint256[]) {
+        return userToIds[user];
+    }
+
 }

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.17.1",
+    "bs58": "^4.0.1",
     "ipfs-mini": "^1.1.2",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.0",
@@ -12,7 +13,8 @@
     "react-scripts": "1.1.0",
     "truffle-contract": "^3.0.2",
     "truffle-hdwallet-provider": "^0.0.3",
-    "uport-connect": "^0.7.0"
+    "uport-connect": "^0.7.0",
+    "web3": "^1.0.0-beta.35"
   },
   "scripts": {
     "start": "react-scripts start",
