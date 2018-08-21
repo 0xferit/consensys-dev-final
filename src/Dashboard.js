@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { setJSON, getJSON } from './util/IPFS.js';
+import { setJSON, getJSON, decodeIPFSHash, encodeIPFSHash } from './util/IPFS.js';
 import { Col, Form, Button, FormControl } from 'react-bootstrap';
 import Loader from "./Loader"
 import web3 from "web3";
 import bs58 from "bs58";
-import { timestamp, getTimestamp, getHash, getTags, getId, getAllIds } from './services/ProofOfExistenceService';
+import { timestamp, getTimestamp, getHash, getTags, getId, getAllIds, getAllHashes } from './services/ProofOfExistenceService';
 
 
 export class Dashboard extends Component {
@@ -12,7 +12,7 @@ export class Dashboard extends Component {
         super();
         this.state = {
             myData: "",
-            ipfsData: "",
+            ipfsData: [],
             timestamp: "",
             loading: false
         }
@@ -29,13 +29,9 @@ export class Dashboard extends Component {
         e.preventDefault();
         this.setState({ loading: true });
         let hash = await setJSON({ myData: this.state.myData });
-        console.log("hash: " + hash);
-        hash = bs58.decode(hash).toString('hex');
-        console.log("hash: " + hash);
-        hash = "0x" + hash.substr(4);
-        console.log("hash: " + hash);
+
         try {
-            await timestamp(hash, "", this.props.specificNetworkAddress);
+            await timestamp(decodeIPFSHash(hash), "", this.props.specificNetworkAddress);
         } catch (error) {
             this.setState({ loading: false });
             alert("There was an error with the transaction.");
@@ -49,28 +45,38 @@ export class Dashboard extends Component {
         //first get hash from smart contract
         console.log("address: " + this.props.specificNetworkAddress);
         const ids = await getAllIds(this.props.specificNetworkAddress);
-        console.log(ids);
+        console.log("ids: " + ids);
+        const hashes = await getAllHashes(this.props.specificNetworkAddress);
+        console.log("hashes: " + hashes);
         const id = ids[ids.length -1].toNumber();
         console.log ("id: " + id);
         const hash0 = await getHash(id);
         //then get data off IPFS
-        const ipfsHash = hash0;
-        console.log("hash0: " + hash0);
-        let encoded = "1220" + ipfsHash.substr(2);
-        console.log("hash0: " + encoded);
-        const bytes = Buffer.from(encoded.toString('hex'), 'hex')
-        encoded = bs58.encode(bytes);
-        console.log("hash0: " + encoded);
-        if (!parseInt(ipfsHash, 16) ) { return } // If hash is zero
+        const ipfsHash = encodeIPFSHash(hash0);
+        const ipfsHashes = hashes.map(x => encodeIPFSHash(x));
+        console.log(ipfsHashes);
+        if (!ipfsHash) { return } // If hash is zero
         const timestamp = await getTimestamp(hash0);
-        const details = await getJSON(encoded);
-        this.setState({ ipfsData: details, loading: false, timestamp })
+        const timestamps = (await Promise.all(hashes.map(async x => getTimestamp(x)))).map(x => x.toNumber());
+        console.log(timestamps);
+        const details = await getJSON(ipfsHash);
+        //const multipleDetails = ipfsHashes.map(x => getJSON(x))
+        //console.log(multipleDetails);
+        this.setState({ ipfsData: ipfsHashes, loading: false, timestamp })
         console.log("fetchData ended");
     }
     handleMyData = (e) => {
         console.log("handleMyData: " + e.target.value);
         this.setState({ myData: e.target.value });
+        console.log(this.state.ipfsData);
     }
+
+    ipfsItems = () => {
+        return this.state.ipfsData.map((x) => <div>{x}</div>);
+    }
+
+
+
 
     render() {
         return (
@@ -82,7 +88,7 @@ export class Dashboard extends Component {
                         <div><h4>No record found for this account.</h4><p>Please enter and submit data on the right</p></div>
                     }
                     <div className="blockchain-display">
-                        {this.state.ipfsData.myData}
+                        {this.ipfsItems()}
                     </div>
 
                 </Col>

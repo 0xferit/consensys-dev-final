@@ -45,3 +45,10 @@ export const getAllIds = async (account) => {
   const items = await instance.getAllIds(account);
   return items;
 }
+
+export const getAllHashes = async (account) => {
+  let ids = await getAllIds(account);
+  ids = ids.map(x => x.toNumber());
+  let hashes = await Promise.all(ids.map(async x => getHash(x)));
+  return hashes;
+}
