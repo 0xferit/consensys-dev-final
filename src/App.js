@@ -28,7 +28,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Proof of Existence</h1>
+          <h1 className="App-title">Proof of Existence with IPFS and uPort</h1>
           <h1 className="App-title">Ferit Tunçer</h1>
           {this.state.avatar &&
             <React.Fragment>

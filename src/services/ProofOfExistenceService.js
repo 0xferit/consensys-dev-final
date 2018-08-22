@@ -52,3 +52,8 @@ export const getAllHashes = async (account) => {
   let hashes = await Promise.all(ids.map(async x => getHash(x)));
   return hashes;
 }
+
+export const getStopped = async () => {
+  const instance = await getInstance();
+  return await instance.stopped();
+}

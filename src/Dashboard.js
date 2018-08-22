@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { setJSON, getJSON, decodeIPFSHash, encodeIPFSHash } from './util/IPFS.js';
 import { Col, Form, Button, FormControl } from 'react-bootstrap';
+import Dropzone from 'react-dropzone'
 import Loader from "./Loader"
 import web3 from "web3";
 import bs58 from "bs58";
-import { timestamp, getTimestamp, getHash, getTags, getId, getAllIds, getAllHashes } from './services/ProofOfExistenceService';
+import { timestamp, getTimestamp, getHash, getTags, getId, getAllIds, getAllHashes, getStopped } from './services/ProofOfExistenceService';
 
 
 export class Dashboard extends Component {
@@ -13,8 +14,8 @@ export class Dashboard extends Component {
         this.state = {
             myData: "",
             ipfsData: [],
-            timestamp: "",
-            loading: false
+            loading: false,
+            contractStopped: ""
         }
     }
 
@@ -43,6 +44,9 @@ export class Dashboard extends Component {
     fetchData = async () => {
         console.log("fetchData");
         //first get hash from smart contract
+        const contractStopped = await getStopped();
+        console.log(contractStopped);
+        this.setState({contractStopped: contractStopped.toString()});
         console.log("address: " + this.props.specificNetworkAddress);
         const ids = await getAllIds(this.props.specificNetworkAddress);
         console.log("ids: " + ids);
@@ -65,7 +69,7 @@ export class Dashboard extends Component {
         }
         console.log(allDetails);
 
-        this.setState({ ipfsData: allDetails, loading: false, timestamp })
+        this.setState({ ipfsData: allDetails, loading: false, contractStopped: contractStopped.toString() })
         console.log("fetchData ended");
 
     }
@@ -76,7 +80,13 @@ export class Dashboard extends Component {
     }
 
     ipfsItems = () => {
-        return this.state.ipfsData.map((x) => <div key="{x.id}">{x.data} {new Date(Number(x.timestamp + "000")).toUTCString()}</div>);
+        return this.state.ipfsData.map((x) =>
+          <tr key="{x.id}">
+              <th scope="col">{x.id}</th>
+              <th scope="col">{x.data}</th>
+              <th scope="col">{new Date(Number(x.timestamp + "000")).toUTCString()}</th>
+          </tr>
+        );
     }
 
 
@@ -87,17 +97,32 @@ export class Dashboard extends Component {
             <React.Fragment>
                 <Col sm={5} >
                     {this.state.timestamp ?
-                        <p>Data loaded from IPFS</p>
+                        <p>Data loaded from IPFS <br/> Current Account: {this.props.specificNetworkAddress} </p>
                         :
                         <div><h4>No record found for this account.</h4><p>Please enter and submit data on the right</p></div>
                     }
                     <div className="blockchain-display">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Timestamp</th>
+                          </tr>
+                        </thead>
+                      <tbody>
                         {this.ipfsItems()}
+
+                      </tbody>
+                      </table>
+
+
                     </div>
 
                 </Col>
                 <Col sm={4} smOffset={2}>
                     <Form horizontal onSubmit={this.handleSubmit}>
+                        <h4>Emergency Stop: {this.state.contractStopped}</h4>
                         <h4>Enter Details:</h4>
                         <p>My super tamper proof data:</p>
 

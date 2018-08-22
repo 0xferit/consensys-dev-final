@@ -1,6 +1,27 @@
 pragma solidity ^0.4.24;
 
-contract ProofOfExistence {
+import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
+
+contract ProofOfExistence is Ownable{
+
+    constructor ()
+    {
+        owner = msg.sender;
+    }
+
+    address public owner;
+    bool public stopped = false;
+
+    modifier onlyOwner {
+        require(owner == msg.sender, "msg.sender should be the owner.");
+        _;
+    }
+
+    modifier onlyWhenNotStopped {
+        require(stopped == false, "Cant run when stopped.");
+        _;
+    }
+
     uint[] public timestamps;
 
     mapping(uint => bytes32) public idToHash;
@@ -8,7 +29,7 @@ contract ProofOfExistence {
     mapping(bytes32 => bytes32) public hashToTags;
     mapping(address => uint[]) public userToIds;
 
-    function timestamp(bytes32 _hash, bytes32 _tags) public returns (uint) {
+    function timestamp(bytes32 _hash, bytes32 _tags) onlyWhenNotStopped public returns (uint) {
         uint previousTimestamp = hashToTimestamp[_hash];
         require (previousTimestamp == 0, 'This hash is already timestamped.');
         uint id = timestamps.push(block.timestamp) -1;
@@ -23,6 +44,14 @@ contract ProofOfExistence {
 
     function getAllIds(address user) public constant returns (uint256[]) {
         return userToIds[user];
+    }
+
+    function emergencyStop() onlyOwner public {
+        stopped = true;
+    }
+
+    function restoreFromEmergency() onlyOwner public {
+        stopped = false;
     }
 
 }
