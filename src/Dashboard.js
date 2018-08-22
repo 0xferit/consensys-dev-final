@@ -48,29 +48,24 @@ export class Dashboard extends Component {
         console.log("ids: " + ids);
         const hashes = await getAllHashes(this.props.specificNetworkAddress);
         console.log("hashes: " + hashes);
-        const id = ids[ids.length -1].toNumber();
-        console.log ("id: " + id);
-        const hash0 = await getHash(id);
         //then get data off IPFS
-        const ipfsHash = encodeIPFSHash(hash0);
         const ipfsHashes = hashes.map(x => encodeIPFSHash(x));
         console.log(ipfsHashes);
-        if (!ipfsHash) { return } // If hash is zero
-        const timestamp = await getTimestamp(hash0);
+        if (Array.isArray(ipfsHashes) && ipfsHashes.length === 0) { return }
         const timestamps = (await Promise.all(hashes.map(async x => getTimestamp(x)))).map(x => x.toNumber());
         console.log(timestamps);
-        const details = await getJSON(ipfsHash);
-        //const multipleDetails = ipfsHashes.map(x => getJSON(x))
-        let multipleDetails = [];
-        for (let x of ipfsHashes)
-        {
-            await multipleDetails.push(await getJSON(x));
-            console.log(multipleDetails);
+        const multipleDetails = (await Promise.all(ipfsHashes.map(async x => getJSON(x))));
 
-        }
         console.log(multipleDetails);
 
-        this.setState({ ipfsData: multipleDetails, loading: false, timestamp })
+        let allDetails = [];
+
+        for(const id of ids){
+            allDetails.push({id: id.toNumber(), timestamp: timestamps[id], data: multipleDetails[id].myData});
+        }
+        console.log(allDetails);
+
+        this.setState({ ipfsData: allDetails, loading: false, timestamp })
         console.log("fetchData ended");
 
     }
@@ -81,7 +76,7 @@ export class Dashboard extends Component {
     }
 
     ipfsItems = () => {
-        return this.state.ipfsData.map((x) => <div>{x.myData}</div>);
+        return this.state.ipfsData.map((x) => <div key="{x.id}">{x.data} {new Date(Number(x.timestamp + "000")).toUTCString()}</div>);
     }
 
 
@@ -92,7 +87,7 @@ export class Dashboard extends Component {
             <React.Fragment>
                 <Col sm={5} >
                     {this.state.timestamp ?
-                        <p>Data loaded from Ethereum / IPFS: <br />Time saved to block: {new Date(Number(this.state.timestamp + "000")).toUTCString()}</p>
+                        <p>Data loaded from IPFS</p>
                         :
                         <div><h4>No record found for this account.</h4><p>Please enter and submit data on the right</p></div>
                     }

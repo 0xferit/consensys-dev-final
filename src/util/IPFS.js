@@ -19,7 +19,7 @@ export const setJSON = async (obj) => {
   });
 }
 
-export const getJSON = (hash) => {
+export const getJSON = async (hash) => {
   console.log("Trying to get: " + hash);
   return new Promise((resolve, reject) => {
     ipfs.catJSON(hash, (err, result) => {
