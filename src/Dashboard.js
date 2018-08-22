@@ -61,9 +61,18 @@ export class Dashboard extends Component {
         console.log(timestamps);
         const details = await getJSON(ipfsHash);
         //const multipleDetails = ipfsHashes.map(x => getJSON(x))
-        //console.log(multipleDetails);
-        this.setState({ ipfsData: ipfsHashes, loading: false, timestamp })
+        let multipleDetails = [];
+        for (let x of ipfsHashes)
+        {
+            await multipleDetails.push(await getJSON(x));
+            console.log(multipleDetails);
+
+        }
+        console.log(multipleDetails);
+
+        this.setState({ ipfsData: multipleDetails, loading: false, timestamp })
         console.log("fetchData ended");
+
     }
     handleMyData = (e) => {
         console.log("handleMyData: " + e.target.value);
@@ -72,7 +81,7 @@ export class Dashboard extends Component {
     }
 
     ipfsItems = () => {
-        return this.state.ipfsData.map((x) => <div>{x}</div>);
+        return this.state.ipfsData.map((x) => <div>{x.myData}</div>);
     }
 
 

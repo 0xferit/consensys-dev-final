@@ -6,7 +6,8 @@ const ipfs = new IPFS({
   protocol: 'https'
 });
 
-export const setJSON = (obj) => {
+export const setJSON = async (obj) => {
+  console.log("Trying to set: " + obj);
   return new Promise((resolve, reject) => {
     ipfs.addJSON(obj, (err, result) => {
       if (err) {
@@ -19,12 +20,14 @@ export const setJSON = (obj) => {
 }
 
 export const getJSON = (hash) => {
+  console.log("Trying to get: " + hash);
   return new Promise((resolve, reject) => {
     ipfs.catJSON(hash, (err, result) => {
       if (err) {
         reject(err)
       } else {
         resolve(result)
+        console.log("Successfully got: " + hash);
       }
     });
   });
