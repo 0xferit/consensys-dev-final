@@ -8,13 +8,14 @@ const uport = new Connect('Proof of Existence', {
 
 const initAccount = async () => {
     const user = await uport.requestCredentials({
-        requested: ['name', 'country', 'avatar'],
+        requested: ['name', 'country', 'avatar', 'network'],
         notifications: true // We want this if we want to recieve credentials
     })
     // get user details
     const decodedId = MNID.decode(user.address)
     const specificNetworkAddress = decodedId.address
-    return { specificNetworkAddress, user }
+    const network = decodedId.network;
+    return { specificNetworkAddress, user, network }
 }
 
 const web3 = uport.getWeb3()

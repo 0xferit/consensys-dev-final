@@ -5,9 +5,14 @@ import ProofOfExistence from '../ethereum/build/contracts/ProofOfExistence.json'
 const ProofOfExistenceContract = contract(ProofOfExistence);
 ProofOfExistenceContract.setProvider(web3.currentProvider);
 
-const getInstance = async () => {
+export const getInstance = async () => {
   const instance = await ProofOfExistenceContract.deployed();
   return instance;
+}
+
+export const getContractAddress = async () => {
+  const instance = await ProofOfExistenceContract.deployed();
+  return instance.address;
 }
 
 export const timestamp = async (hash, tags, account) => {
@@ -55,5 +60,7 @@ export const getAllHashes = async (account) => {
 
 export const getStopped = async () => {
   const instance = await getInstance();
+  console.log("stopped")
+  console.log(await instance.stopped())
   return await instance.stopped();
 }

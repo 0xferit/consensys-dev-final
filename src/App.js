@@ -6,7 +6,7 @@ import { initAccount } from "./util/Uport";
 class App extends Component {
   constructor(props) {
     super(props)
-    this.state = { userName: "", avatar: "", specificNetworkAddress: "" }
+    this.state = { userName: "", avatar: "", specificNetworkAddress: "", network: "" }
   }
 
   handleLogin = async (e) => {
@@ -15,8 +15,11 @@ class App extends Component {
     this.setState({
       specificNetworkAddress: identity.specificNetworkAddress,
       userName: identity.user.name,
-      avatar: identity.user.avatar.uri
+      avatar: identity.user.avatar.uri,
+      network: identity.network
     })
+
+    console.log("network: " + this.state.network);
   }
 
   handleLogout = async (e) => {
@@ -46,7 +49,7 @@ class App extends Component {
         <Grid>
           <Row className="grid-row">
             {this.state.userName ? (
-              <Dashboard specificNetworkAddress={this.state.specificNetworkAddress} />
+              <Dashboard specificNetworkAddress={this.state.specificNetworkAddress} network={this.state.network}/>
             ) : (
                 <Col sm={6} smOffset={3} className="login">
                   <p className="text-large">This app uses uPort for login and transaction approvals.

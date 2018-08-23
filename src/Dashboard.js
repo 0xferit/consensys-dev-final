@@ -5,7 +5,7 @@ import Dropzone from 'react-dropzone'
 import Loader from "./Loader"
 import web3 from "web3";
 import bs58 from "bs58";
-import { timestamp, getTimestamp, getHash, getTags, getId, getAllIds, getAllHashes, getStopped } from './services/ProofOfExistenceService';
+import { timestamp, getTimestamp, getHash, getTags, getId, getAllIds, getAllHashes, getStopped, getContractAddress } from './services/ProofOfExistenceService';
 
 
 export class Dashboard extends Component {
@@ -15,7 +15,8 @@ export class Dashboard extends Component {
             myData: "",
             ipfsData: [],
             loading: false,
-            contractStopped: ""
+            contractStopped: false,
+            contractAddress: "Fetching..."
         }
     }
 
@@ -43,10 +44,12 @@ export class Dashboard extends Component {
 
     fetchData = async () => {
         console.log("fetchData");
+        console.log("network: " + this.props.network);
+        console.log("contract address: " + await getContractAddress());
         //first get hash from smart contract
         const contractStopped = await getStopped();
         console.log(contractStopped);
-        this.setState({contractStopped: contractStopped.toString()});
+        this.setState({contractStopped, contractAddress: await  getContractAddress()});
         console.log("address: " + this.props.specificNetworkAddress);
         const ids = await getAllIds(this.props.specificNetworkAddress);
         console.log("ids: " + ids);
@@ -65,7 +68,7 @@ export class Dashboard extends Component {
         let allDetails = [];
 
         for(const id of ids){
-            allDetails.push({id: id.toNumber(), timestamp: timestamps[id], data: multipleDetails[id].myData});
+            allDetails.push({id: id.toNumber(), hash: hashes[id], ipfsHash: ipfsHashes[id], timestamp: timestamps[id], data: multipleDetails[id].myData});
         }
         console.log(allDetails);
 
@@ -83,6 +86,7 @@ export class Dashboard extends Component {
         return this.state.ipfsData.map((x) =>
           <tr key="{x.id}">
               <th scope="col">{x.id}</th>
+              <th scope="col">{x.hash}<br/>{x.ipfsHash}</th>
               <th scope="col">{x.data}</th>
               <th scope="col">{new Date(Number(x.timestamp + "000")).toUTCString()}</th>
           </tr>
@@ -95,9 +99,13 @@ export class Dashboard extends Component {
     render() {
         return (
             <React.Fragment>
-                <Col sm={5} >
-                    {this.state.timestamp ?
-                        <p>Data loaded from IPFS <br/> Current Account: {this.props.specificNetworkAddress} </p>
+                <Col sm={12} >
+                    <p> Network: {this.props.network} </p>
+                    <p> Contract: {this.state.contractAddress}</p>
+                    <p> Account: {this.props.specificNetworkAddress}</p>
+                    <br/>
+                    {this.state.ipfsData.length !== 0 ?
+                        <p>Data loaded from IPFS  </p>
                         :
                         <div><h4>No record found for this account.</h4><p>Please enter and submit data on the right</p></div>
                     }
@@ -106,6 +114,7 @@ export class Dashboard extends Component {
                         <thead>
                           <tr>
                             <th scope="col">#</th>
+                            <th scope="col">Hash (Contract / IPFS)</th>
                             <th scope="col">Data</th>
                             <th scope="col">Timestamp</th>
                           </tr>
@@ -120,22 +129,28 @@ export class Dashboard extends Component {
                     </div>
 
                 </Col>
-                <Col sm={4} smOffset={2}>
-                    <Form horizontal onSubmit={this.handleSubmit}>
-                        <h4>Emergency Stop: {this.state.contractStopped}</h4>
-                        <h4>Enter Details:</h4>
-                        <p>My super tamper proof data:</p>
 
-                        <FormControl componentClass="textarea" type="text" rows="3" placeholder="enter data"
+                <div className="row">
+                <Col sm={12}>
+                    <Form horizontal onSubmit={this.handleSubmit}>
+                        <p><h4>Emergency Stop: {this.state.contractStopped.toString()}</h4></p>
+                        <br/>
+                        <h4>Add New Proof</h4>
+
+                        <FormControl componentClass="textarea" type="text" rows="3" placeholder="Enter text here.."
                             value={this.state.myData}
                             onChange={this.handleMyData} />
                         <br />
-                        <Button type="submit">Update Details</Button>
+                        <Button disabled={this.state.contractStopped} type="submit">Timestamp!</Button>
                     </Form>
                 </Col>
-                {this.state.loading &&
-                    <Loader />
-                }
+
+              </div>
+              {this.state.loading &&
+                  <Loader />
+              }
+
+
             </React.Fragment>
         )
     }
