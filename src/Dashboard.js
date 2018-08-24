@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { setJSON, getJSON, decodeIPFSHash, encodeIPFSHash } from './util/IPFS.js';
 import { Col, Row, Form, Button, FormControl } from 'react-bootstrap';
@@ -43,6 +44,8 @@ export class Dashboard extends Component {
         this.fetchData();
     }
 
+    delayedSearch = _.debounce((term) => {this.fetchDataById(term)}, 0);
+
     fetchData = async () => {
         //first get hash from smart contract
         const contractStopped = await getStopped();
@@ -68,13 +71,19 @@ export class Dashboard extends Component {
     }
 
     fetchDataById = async (id) => {
-        if(isNaN(id) || id == ''){
+        if(isNaN(id) || id === ''){
           this.setState({searchResult: []});
           return;
         }
+
         console.log("Search id is: " + id );
 
         const hash = await getHash(id);
+        if(parseInt(hash, 16) === 0) {
+          this.setState({searchResult: []});
+          return;
+        }
+
         const ipfsHash = encodeIPFSHash(hash);
         const timestamp = (await getTimestamp(hash)).toNumber();
         const data = await getJSON(ipfsHash);
@@ -105,9 +114,9 @@ export class Dashboard extends Component {
       console.log(payload);
       if(!Array.isArray(payload) || payload.length === 0)
       {
-
-        return (<div>NO RESULT</div>)
+        return (<h4>Not Found</h4>);
       }
+
       const items = payload.map((x) =>
         <tr key={x.id}>
             <th scope="col">{x.id}</th>
@@ -137,25 +146,33 @@ export class Dashboard extends Component {
         return (
             <div>
               <React.Fragment>
-                <SearchBar onSearchTermChange={term => this.fetchDataById(term)}>
-                </SearchBar>
-                <Col sm={12}>
-                  {this.blockchainDisplay(this.state.searchResult)}
-                </Col>
+                <div className="search">
+                  <SearchBar onSearchTermChange={term => this.delayedSearch(term)}>
+                  </SearchBar>
+                  <Col sm={12}>
+                    {this.blockchainDisplay(this.state.searchResult)}
+                  </Col>
+                </div>
               </React.Fragment>
 
               <React.Fragment>
                 <Col sm={12} >
+                  <div className="status">
+                    <h4>Status</h4>
                     <p> Network: {this.props.network} </p>
                     <p> Contract: {this.state.contractAddress}</p>
                     <p> Account: {this.props.specificNetworkAddress}</p>
+                    <p>Emergency Stop: {this.state.contractStopped.toString()}</p>
+                  </div>
+
+
                     <br/>
                     {this.state.ipfsData.length !== 0 ?
                         <h4>My Records</h4>
                         :
                         <div><h4>No record found for this account.</h4><p>Please enter and submit data on the right</p></div>
                     }
-                    <div className="my-records">
+                    <div className="blockchain-display">
                       {this.blockchainDisplay(this.state.ipfsData, 0)}
                     </div>
 
@@ -166,7 +183,6 @@ export class Dashboard extends Component {
                 <Col sm={12}>
                     <Form horizontal onSubmit={this.handleSubmit}>
                         <br/>
-                        <p>Emergency Stop: {this.state.contractStopped.toString()}</p>
                         <br/>
                         <h4>Add New Proof To The Notary</h4>
 
@@ -174,7 +190,7 @@ export class Dashboard extends Component {
                             value={this.state.myData}
                             onChange={this.handleMyData} />
                         <br />
-                        <Button type="submit">Notarize!</Button>
+                        <Button type="submit">Notarize</Button>
                     </Form>
                 </Col>
                 {this.state.loading &&

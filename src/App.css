@@ -42,7 +42,7 @@ body {
   right:20px;
   top:15px;
   text-align: right;
-  
+
 }
 .avatar img{
   width:70px;
@@ -106,6 +106,25 @@ h3{
   transform: translateZ(0);
   -webkit-animation: load6 1.7s infinite ease, round 1.7s infinite ease;
   animation: load6 1.7s infinite ease, round 1.7s infinite ease;
+}
+
+.search {
+  text-align: center;
+}
+
+.search-bar {
+  margin: 5px;
+  text-align: center;
+}
+
+.search-bar input{
+  width: 75%;
+}
+
+.status {
+  margin: 30px;
+  text-align: center;
+  border-style: solid;
 }
 @-webkit-keyframes load6 {
   0% {
