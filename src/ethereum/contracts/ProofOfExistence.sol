@@ -26,10 +26,10 @@ contract ProofOfExistence is Ownable{
 
     mapping(uint => bytes32) public idToHash;
     mapping(bytes32 => uint) public hashToTimestamp;
-    mapping(bytes32 => bytes32) public hashToTags;
+    mapping(bytes32 => string) public hashToTags;
     mapping(address => uint[]) public userToIds;
 
-    function timestamp(bytes32 _hash, bytes32 _tags) onlyWhenNotStopped public returns (uint) {
+    function timestamp(bytes32 _hash, string _tags) onlyWhenNotStopped public returns (uint) {
         uint previousTimestamp = hashToTimestamp[_hash];
         require (previousTimestamp == 0, 'This hash is already timestamped.');
         uint id = timestamps.push(block.timestamp) -1;

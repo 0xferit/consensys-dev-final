@@ -118,13 +118,42 @@ h3{
 }
 
 .search-bar input{
-  width: 75%;
+  width: 35%;
 }
 
 .status {
   margin: 30px;
+  padding: 30px;
   text-align: center;
   border-style: solid;
+  font-weight: bold;
+}
+
+.drop {
+  margin-top: 50px;
+  border-style: dashed;
+  text-align: center;
+}
+
+.text-input {
+  margin: 30px
+}
+
+.notary {
+  text-align: center;
+}
+
+.notarize {
+  width: 100%;
+}
+
+#tags {
+  text-align: center;
+  margin: 30px;
+}
+
+#no-result {
+  font-weight: bold;
 }
 @-webkit-keyframes load6 {
   0% {

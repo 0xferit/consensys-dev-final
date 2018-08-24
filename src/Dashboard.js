@@ -5,7 +5,7 @@ import { Col, Row, Form, Button, FormControl } from 'react-bootstrap';
 import Dropzone from 'react-dropzone'
 import Loader from "./Loader"
 import web3 from "web3";
-import { timestamp, getTimestamp, getHash, getTags, getId, getAllIds, getAllHashes, getStopped, getContractAddress } from './services/ProofOfExistenceService';
+import { timestamp, getTimestamp, getHash, getTags, getAllTags, getId, getAllIds, getAllHashes, getStopped, getContractAddress } from './services/ProofOfExistenceService';
 import SearchBar from './SearchBar';
 
 export class Dashboard extends Component {
@@ -13,6 +13,7 @@ export class Dashboard extends Component {
         super();
         this.state = {
             myData: "",
+            myTags: "",
             ipfsData: [],
             loading: false,
             contractStopped: false,
@@ -36,7 +37,7 @@ export class Dashboard extends Component {
         console.log("receipt " + receipt);
 
         try {
-            await timestamp(decodeIPFSHash(receipt[0].hash), "", this.props.specificNetworkAddress);
+            await timestamp(decodeIPFSHash(receipt[0].hash), this.state.myTags, this.props.specificNetworkAddress);
         } catch (error) {
             this.setState({ loading: false });
             alert("There was an error with the transaction.");
@@ -45,24 +46,23 @@ export class Dashboard extends Component {
         this.fetchData();
     }
 
-    delayedSearch = _.debounce((term) => {this.fetchDataById(term)}, 0);
-
     fetchData = async () => {
         //first get hash from smart contract
         const contractStopped = await getStopped();
-        this.setState({contractStopped, contractAddress: await  getContractAddress()});
+        this.setState({contractStopped, contractAddress: await getContractAddress()});
         const ids = await getAllIds(this.props.specificNetworkAddress);
-        const hashes = await getAllHashes(this.props.specificNetworkAddress);
+        const hashes = await getAllHashes(ids);
         //then get data off IPFS
         const ipfsHashes = hashes.map(x => encodeIPFSHash(x));
         if (Array.isArray(ipfsHashes) && ipfsHashes.length === 0) { return }
+        const allTags = await getAllTags(hashes);
         const timestamps = (await Promise.all(hashes.map(async x => getTimestamp(x)))).map(x => x.toNumber());
 
 
         let allDetails = [];
 
         for(const id of ids){
-            allDetails.push({id: id.toNumber(), hash: hashes[id], ipfsHash: ipfsHashes[id], timestamp: timestamps[id]});
+            allDetails.push({id: id.toNumber(), hash: hashes[id], ipfsHash: ipfsHashes[id], tags: allTags[id], timestamp: timestamps[id]});
         }
 
         this.setState({ ipfsData: allDetails, loading: false, contractStopped: contractStopped.toString() })
@@ -84,14 +84,14 @@ export class Dashboard extends Component {
           return;
         }
 
+        const tags = await getTags(hash);
         const ipfsHash = encodeIPFSHash(hash);
         const timestamp = (await getTimestamp(hash)).toNumber();
-        const data = await getJSON(ipfsHash);
         console.log("fetchDataById");
         console.log(timestamp);
 
         let search = [];
-        search.push({id, hash, ipfsHash, timestamp, data: data.myData});
+        search.push({id, hash, ipfsHash, tags, timestamp});
         console.log("search");
         console.log(search);
 
@@ -105,31 +105,30 @@ export class Dashboard extends Component {
         this.setState({ myData: e.target.value });
     }
 
-    getRandomInt = (max) => {
-      return Math.floor(Math.random() * Math.floor(max));
-    }
 
     blockchainDisplay = (payload, flag) => {
       console.log("payload " +flag);
       console.log(payload);
       if(!Array.isArray(payload) || payload.length === 0)
       {
-        return (<h4>No Result</h4>);
+        return (<p id="no-result">No Result</p>);
       }
 
       const items = payload.map((x) =>
         <tr key={x.id}>
             <th scope="col">{x.id}</th>
             <th scope="col"><a href={"https://ipfs.io/ipfs/"+ x.ipfsHash} target="_blank">{x.ipfsHash}</a><br/>{x.hash}</th>
+            <th scope="col">{x.tags}</th>
             <th scope="col">{new Date(Number(x.timestamp + "000")).toUTCString()}</th>
         </tr>
       );
       return(
-          <table key={this.getRandomInt(100000)} className="table">
+          <table key="blockchainDisplay" className="table">
             <thead>
               <tr>
                 <th scope="col">Record ID</th>
                 <th scope="col">IPFS Hash (Plaintext / Encoded)</th>
+                <th scope="col">Tags</th>
                 <th scope="col">Timestamp</th>
               </tr>
             </thead>
@@ -150,8 +149,9 @@ export class Dashboard extends Component {
         const buffer = Buffer.from(reader.result);
         const receipt = (await setJSON(buffer));
         console.log(receipt);
+        console.log("tags at this point: " + this.state.myTags);
         try {
-            await timestamp(decodeIPFSHash(receipt[0].hash), "", this.props.specificNetworkAddress);
+            await timestamp(decodeIPFSHash(receipt[0].hash), this.state.myTags, this.props.specificNetworkAddress);
         } catch (error) {
             this.setState({ loading: false });
             alert("There was an error with the transaction.");
@@ -162,15 +162,25 @@ export class Dashboard extends Component {
       })
     }
 
+    onDrop2 = async (acceptedFiles, rejectedFiles) => {
+      this.setState({loading: true});
+      var reader = new FileReader();
+      reader.readAsArrayBuffer(acceptedFiles[0]);
+      reader.addEventListener('loadend', () => {
+        const buffer = Buffer.from(reader.result);
+        this.setState({myData: buffer});
+      })
+    }
+
     render() {
         return (
             <div>
               <React.Fragment>
                 <div className="search">
-                  <SearchBar onSearchTermChange={term => this.delayedSearch(term)}>
+                  <SearchBar onSearchTermChange={term => this.fetchDataById(term)}>
                   </SearchBar>
                   <Col sm={12}>
-                    {this.blockchainDisplay(this.state.searchResult)}
+                      {this.blockchainDisplay(this.state.searchResult)}
                   </Col>
                 </div>
               </React.Fragment>
@@ -178,7 +188,6 @@ export class Dashboard extends Component {
               <React.Fragment>
                 <Col sm={12} >
                   <div className="status">
-                    <h4>Status</h4>
                     <p> Network: {this.props.network} </p>
                     <p> Contract: {this.state.contractAddress}</p>
                     <p> Account: {this.props.specificNetworkAddress}</p>
@@ -190,9 +199,9 @@ export class Dashboard extends Component {
                     {this.state.ipfsData.length !== 0 ?
                         <h4>My Records</h4>
                         :
-                        <div><h4>No record found for this account.</h4><p>Please enter and submit data on the right</p></div>
+                        <div><h4>No record found for this account.</h4><p>You can upload a file below.</p></div>
                     }
-                    <div className="blockchain-display">
+                    <div>
                       {this.blockchainDisplay(this.state.ipfsData, 0)}
                     </div>
 
@@ -200,32 +209,39 @@ export class Dashboard extends Component {
                 </React.Fragment>
 
                 <React.Fragment>
-                <Col sm={6}>
-                    <Form horizontal onSubmit={this.handleSubmit}>
-                        <br/>
-                        <br/>
-                        <h4>Add New Proof To The Notary</h4>
+                  <div>
+                <Row>
 
-                        <FormControl componentClass="textarea" type="text" rows="3" placeholder="Enter text here.."
-                            value={this.state.myData}
-                            onChange={this.handleMyData} />
-                        <br />
-                        <Button type="submit">Notarize</Button>
-                    </Form>
-                    <div className="pt-card col-md-6">
-                      <Dropzone className="drop" onDrop={this.onDrop} multiple={false}>
-                        <div className="pad-side">
-                          <h4 className="pt-ui-text-large">Drop a file into the box to get started!</h4>
-                          <h4 className="pt-ui-text-large">The file will NOT be uploaded. The cryptographic proof is calculated client-side</h4>
-                        </div>
-                      </Dropzone>
-                    </div>
+                <Col sm={12}>
+                  <div >
+                    <Dropzone className="drop" onDrop={this.onDrop} multiple={false} onChange={this.handleMyData} >
+                      <div className="pad-side">
+                        <h4 className="pt-ui-text-large">Drop a file into the box to upload!</h4>
+                      </div>
+                    </Dropzone>
+
+                  </div>
                 </Col>
-                {this.state.loading &&
-                    <Loader />
-                }
+                </Row>
+                <Row>
+                  <Col sm={12}>
+                    <Form  id="tags" horizontal>
+                        <FormControl componentClass="textarea" type="text" rows="1" placeholder="Optional: Enter tags here.."
+                            value={this.state.myTags}
+                            onChange={(e) => this.setState({myTags: e.target.value})} />
+                    </Form>
+                  </Col>
+
+                  {this.state.loading &&
+                      <Loader />
+                  }
+                </Row>
+              </div>
+
 
               </React.Fragment>
+
+
             </div>
 
         )

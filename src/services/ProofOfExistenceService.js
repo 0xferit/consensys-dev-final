@@ -51,11 +51,15 @@ export const getAllIds = async (account) => {
   return items;
 }
 
-export const getAllHashes = async (account) => {
-  let ids = await getAllIds(account);
-  ids = ids.map(x => x.toNumber());
-  let hashes = await Promise.all(ids.map(async x => getHash(x)));
+export const getAllHashes = async (ids) => {
+  const hashes = await Promise.all(ids.map(async x => getHash(x)));
   return hashes;
+}
+
+export const getAllTags = async (hashes) => {
+  const tags = await Promise.all(hashes.map(async x => getTags(x)));
+  console.log("can we retrieve tags?: " + tags);
+  return tags;
 }
 
 export const getStopped = async () => {
