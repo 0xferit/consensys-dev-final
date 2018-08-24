@@ -57,13 +57,12 @@ export class Dashboard extends Component {
         const ipfsHashes = hashes.map(x => encodeIPFSHash(x));
         if (Array.isArray(ipfsHashes) && ipfsHashes.length === 0) { return }
         const timestamps = (await Promise.all(hashes.map(async x => getTimestamp(x)))).map(x => x.toNumber());
-        const multipleDetails = (await Promise.all(ipfsHashes.map(async x => getJSON(x))));
 
 
         let allDetails = [];
 
         for(const id of ids){
-            allDetails.push({id: id.toNumber(), hash: hashes[id], ipfsHash: ipfsHashes[id], timestamp: timestamps[id], data: multipleDetails[id].myData});
+            allDetails.push({id: id.toNumber(), hash: hashes[id], ipfsHash: ipfsHashes[id], timestamp: timestamps[id]});
         }
 
         this.setState({ ipfsData: allDetails, loading: false, contractStopped: contractStopped.toString() })
