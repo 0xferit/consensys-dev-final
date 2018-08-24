@@ -58,7 +58,8 @@ export const getAllHashes = async (ids) => {
 
 export const getAllTags = async (hashes) => {
   const tags = await Promise.all(hashes.map(async x => getTags(x)));
-  console.log("can we retrieve tags?: " + tags);
+  console.log("can we retrieve tags?");
+  console.log(tags);
   return tags;
 }
 

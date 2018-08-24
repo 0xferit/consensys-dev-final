@@ -149,7 +149,7 @@ export class Dashboard extends Component {
         const buffer = Buffer.from(reader.result);
         const receipt = (await setJSON(buffer));
         console.log(receipt);
-        console.log("tags at this point: " + this.state.myTags);
+        console.log(this.state.myTags.split(";"));
         try {
             await timestamp(decodeIPFSHash(receipt[0].hash), this.state.myTags, this.props.specificNetworkAddress);
         } catch (error) {
