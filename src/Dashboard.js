@@ -32,10 +32,11 @@ export class Dashboard extends Component {
         console.log("handleSubmit");
         e.preventDefault();
         this.setState({ loading: true });
-        let hash = await setJSON({ myData: this.state.myData });
+        let receipt = await setJSON({path: '', content: Buffer.from(this.state.myData)});
+        console.log("receipt " + receipt);
 
         try {
-            await timestamp(decodeIPFSHash(hash), "", this.props.specificNetworkAddress);
+            await timestamp(decodeIPFSHash(receipt[0].hash), "", this.props.specificNetworkAddress);
         } catch (error) {
             this.setState({ loading: false });
             alert("There was an error with the transaction.");
@@ -114,14 +115,13 @@ export class Dashboard extends Component {
       console.log(payload);
       if(!Array.isArray(payload) || payload.length === 0)
       {
-        return (<h4>Not Found</h4>);
+        return (<h4>No Result</h4>);
       }
 
       const items = payload.map((x) =>
         <tr key={x.id}>
             <th scope="col">{x.id}</th>
-            <th scope="col">{x.ipfsHash}<br/>{x.hash}</th>
-            <th scope="col">{x.data}</th>
+            <th scope="col"><a href={"https://ipfs.io/ipfs/"+ x.ipfsHash} target="_blank">{x.ipfsHash}</a><br/>{x.hash}</th>
             <th scope="col">{new Date(Number(x.timestamp + "000")).toUTCString()}</th>
         </tr>
       );
@@ -131,7 +131,6 @@ export class Dashboard extends Component {
               <tr>
                 <th scope="col">Record ID</th>
                 <th scope="col">IPFS Hash (Plaintext / Encoded)</th>
-                <th scope="col">Data</th>
                 <th scope="col">Timestamp</th>
               </tr>
             </thead>
@@ -140,6 +139,28 @@ export class Dashboard extends Component {
           </tbody>
         </table>
       )
+    }
+
+    onDrop = async (acceptedFiles, rejectedFiles) => {
+      var reader = new FileReader();
+      reader.readAsArrayBuffer(acceptedFiles[0]);
+      this.setState({ loading: true });
+      reader.addEventListener("loadend", async () => {
+        console.log("reader");
+        console.log(reader.result);
+        const buffer = Buffer.from(reader.result);
+        const receipt = (await setJSON(buffer));
+        console.log(receipt);
+        try {
+            await timestamp(decodeIPFSHash(receipt[0].hash), "", this.props.specificNetworkAddress);
+        } catch (error) {
+            this.setState({ loading: false });
+            alert("There was an error with the transaction.");
+            console.log(error);
+            return;
+        }
+        this.fetchData();
+      })
     }
 
     render() {
@@ -180,7 +201,7 @@ export class Dashboard extends Component {
                 </React.Fragment>
 
                 <React.Fragment>
-                <Col sm={12}>
+                <Col sm={6}>
                     <Form horizontal onSubmit={this.handleSubmit}>
                         <br/>
                         <br/>
@@ -192,6 +213,14 @@ export class Dashboard extends Component {
                         <br />
                         <Button type="submit">Notarize</Button>
                     </Form>
+                    <div className="pt-card col-md-6">
+                      <Dropzone className="drop" onDrop={this.onDrop} multiple={false}>
+                        <div className="pad-side">
+                          <h4 className="pt-ui-text-large">Drop a file into the box to get started!</h4>
+                          <h4 className="pt-ui-text-large">The file will NOT be uploaded. The cryptographic proof is calculated client-side</h4>
+                        </div>
+                      </Dropzone>
+                    </div>
                 </Col>
                 {this.state.loading &&
                     <Loader />

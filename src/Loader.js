@@ -4,7 +4,7 @@ const Loader = () => {
     return (
         <div className="outerLoader">
             <div className="loader"></div>
-            <h4>Please approve transaction on the uPort app on your mobile phone. <br />Notarizing the data permanently to the ethereum blockchain.<br />This transaction may take up to one minute.</h4>
+            <h4>Please approve the transaction on the uPort app on your mobile phone. <br />This transaction may take up to one minute.</h4>
         </div>
     );
 };

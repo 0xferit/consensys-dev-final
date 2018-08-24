@@ -1,4 +1,4 @@
-const IPFS = require('ipfs-mini');
+const IPFS = require('ipfs-api');
 const BS58 = require('bs58');
 const ipfs = new IPFS({
   host: 'ipfs.infura.io',
@@ -9,10 +9,12 @@ const ipfs = new IPFS({
 export const setJSON = async (obj) => {
   console.log("Trying to set: " + obj);
   return new Promise((resolve, reject) => {
-    ipfs.addJSON(obj, (err, result) => {
+    ipfs.add(obj, (err, result) => {
       if (err) {
-        reject(err)
+        console.log();
+        reject("err: " + err)
       } else {
+        console.log(result);
         resolve(result);
       }
     });
@@ -22,7 +24,7 @@ export const setJSON = async (obj) => {
 export const getJSON = async (hash) => {
   console.log("Trying to get: " + hash);
   return new Promise((resolve, reject) => {
-    ipfs.catJSON(hash, (err, result) => {
+    ipfs.cat(hash, (err, result) => {
       if (err) {
         reject(err)
       } else {
