@@ -13,7 +13,7 @@ Users can see their records and search for other records by providing the ID of 
 - Files are stored on **IPFS**. 
 - Identity management is handled using **uPort**.
 - User interface built with **React**.
-- Imports [Ownable](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) from OpenZeppelin.
+- **Imports [Ownable](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) library** from OpenZeppelin.
 - Deployed to the **Rinkeby** network at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2).
 - Impemented **Emergency Stop** design pattern.
 
