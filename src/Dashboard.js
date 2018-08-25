@@ -18,7 +18,6 @@ export class Dashboard extends Component {
             contractStopped: false,
             contractAddress: "Fetching...",
             searchResult: [],
-            counter: 1
         }
     }
 
@@ -45,24 +44,38 @@ export class Dashboard extends Component {
         this.fetchData();
     }
 
+
+
     fetchData = async () => {
         //first get hash from smart contract
         const contractStopped = await getStopped();
         this.setState({contractStopped, contractAddress: await getContractAddress()});
         const ids = await getAllIds(this.props.specificNetworkAddress);
+        console.log("IDs: " + ids);
         const hashes = await getAllHashes(ids);
+        console.log("hashesssss: " + hashes);
         //then get data off IPFS
         const ipfsHashes = hashes.map(x => encodeIPFSHash(x));
-        if (Array.isArray(ipfsHashes) && ipfsHashes.length === 0) { return }
+        if (Array.isArray(ipfsHashes) && ipfsHashes.length === 0) {
+          console.log("early return");
+          return;
+       }
+        console.log("didn't return early");
         const allTags = await getAllTags(hashes);
         const timestamps = (await Promise.all(hashes.map(async x => getTimestamp(x)))).map(x => x.toNumber());
-
+        console.log("timestamps good?: " + timestamps);
 
         let allDetails = [];
 
-        for(const id of ids){
-            allDetails.push({id: id.toNumber(), hash: hashes[id], ipfsHash: ipfsHashes[id], tags: allTags[id], timestamp: timestamps[id]});
+        for(let i = 0; i < ids.length; i++){
+            console.log(ids[i].toNumber());
+            console.log(hashes[ids[i]]);
+            console.log(ipfsHashes[ids[i]]);
+            allDetails.push({id: ids[i].toNumber(), hash: hashes[i], ipfsHash: ipfsHashes[i], tags: allTags[i], timestamp: timestamps[i]});
         }
+
+        console.log("allDetails");
+        console.log(allDetails);
 
         this.setState({ ipfsData: allDetails, loading: false, contractStopped: contractStopped.toString() })
         console.log("fetchData ended");
@@ -115,7 +128,7 @@ export class Dashboard extends Component {
       }
 
       const items = payload.map((x) =>
-        <tr key={x.id}>
+        <tr key={flag+ x.id}>
             <th scope="col">{x.id}</th>
             <th scope="col"><a href={"https://ipfs.io/ipfs/"+ x.ipfsHash} target="_blank">{x.ipfsHash}</a><br/>{x.hash}</th>
             <th scope="col">{x.tags}</th>
@@ -127,7 +140,7 @@ export class Dashboard extends Component {
             <thead>
               <tr>
                 <th scope="col">Record ID</th>
-                <th scope="col">IPFS Hash (Plaintext / Encoded)</th>
+                <th scope="col">IPFS Hash (Base58 / Decoded)</th>
                 <th scope="col">Tags</th>
                 <th scope="col">Timestamp</th>
               </tr>
@@ -170,7 +183,7 @@ export class Dashboard extends Component {
                   <SearchBar onSearchTermChange={term => this.fetchDataById(term)}>
                   </SearchBar>
                   <Col sm={12}>
-                      {this.blockchainDisplay(this.state.searchResult)}
+                      {this.blockchainDisplay(this.state.searchResult, "search")}
                   </Col>
                 </div>
               </React.Fragment>
@@ -192,7 +205,7 @@ export class Dashboard extends Component {
                         <div><h4>No record found for this account.</h4><p>You can upload a file below.</p></div>
                     }
                     <div>
-                      {this.blockchainDisplay(this.state.ipfsData, 0)}
+                      {this.blockchainDisplay(this.state.ipfsData, "myrecords")}
                     </div>
 
                 </Col>

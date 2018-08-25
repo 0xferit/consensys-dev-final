@@ -52,7 +52,15 @@ export const getAllIds = async (account) => {
 }
 
 export const getAllHashes = async (ids) => {
-  const hashes = await Promise.all(ids.map(async x => getHash(x)));
+  let hashes;
+  try{
+    hashes = await Promise.all(ids.map(async x => getHash(x)));
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
   return hashes;
 }
 

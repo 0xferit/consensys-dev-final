@@ -41,6 +41,6 @@ export const decodeIPFSHash = (hash) => {
 
 export const encodeIPFSHash = (hash) => {
   const multihashPrefix = "1220";
-  console.log("ipfs hash: " +hash);
+  console.log("encoding hash: " +hash);
   return BS58.encode(Buffer.from((multihashPrefix + hash.substr(2)).toString('hex'), 'hex'));
 }
