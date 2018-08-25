@@ -25,7 +25,7 @@ Users can see their records and search for other records by providing the ID of 
  - Truffle
  - uPort
  
-### Useful Commands
+#### Useful Commands
 
 Install dependencies: 
 ```yarn install```
