@@ -2,17 +2,18 @@
 
 ### What Good It Does?
 
-This project lets users to upload files to create proofs that given file existed at a certain point in time. Upload time is stored in the smart contract and records are immutable.
+This project stores given file along with a timestamp in the smart contract and records are immutable. So this provides an opportunity for users to prove a specific file existed at a certain point in time. 
 
-Along with the file, user can optionally provide some tags describing the content.
+Along with the file, users can optionally provide some tags describing the content.
 
 Users can see their records and search for other records by providing the ID of the record.
 
 ### Tech Stack
 
-Files are stored on **IPFS**. Identity management is handled using **uPort**. And user interface built with **React**. 
-
-Contract imports [Ownable](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) from OpenZeppelin and deployed to the **Rinkeby** network at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2)
+- Files are stored on **IPFS**. 
+- Identity management is handled using **uPort**.
+- User interface built with **React**.
+- Contract imports [Ownable](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) from OpenZeppelin and deployed to the **Rinkeby** network at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2)
 
 -----
 
