@@ -2,7 +2,7 @@
 
 ### What Good It Does?
 
-This project lets users to upload files to create proofs of existences. Upload time is stored in the smart contract and records are immutable.
+This project lets users to upload files to create proofs that given file existed at a certain point in time. Upload time is stored in the smart contract and records are immutable.
 
 Along with the file, user can optionally provide some tags describing the content.
 
