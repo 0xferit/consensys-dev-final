@@ -18,7 +18,7 @@ Users can see their records and search for other records by providing the ID of 
 - Impemented **Emergency Stop** design pattern.
 
 ###  Usage
-#### Prerequisites
+#### Requirements
  - Nodejs
  - Npm
  - Yarn
