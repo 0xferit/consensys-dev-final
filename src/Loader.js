@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Loader = () => {
+export const Loader = () => {
     return (
         <div className="outerLoader">
             <div className="loader"></div>
@@ -9,4 +9,11 @@ const Loader = () => {
     );
 };
 
-export default Loader;
+export const SearchLoader = () => {
+    return (
+        <div className="outerLoader">
+            <div className="loader"></div>
+            <h4>Searching...</h4>
+        </div>
+    );
+};

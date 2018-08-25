@@ -1,10 +1,8 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
-import { setJSON, getJSON, decodeIPFSHash, encodeIPFSHash } from './util/IPFS.js';
-import { Col, Row, Form, Button, FormControl } from 'react-bootstrap';
+import { setJSON, decodeIPFSHash, encodeIPFSHash } from './util/IPFS.js';
+import { Col, Row, Form, FormControl } from 'react-bootstrap';
 import Dropzone from 'react-dropzone'
-import Loader from "./Loader"
-import web3 from "web3";
+import {Loader, SearchLoader} from "./Loader"
 import { timestamp, getTimestamp, getHash, getTags, getAllTags, getId, getAllIds, getAllHashes, getStopped, getContractAddress } from './services/ProofOfExistenceService';
 import SearchBar from './SearchBar';
 
@@ -16,6 +14,7 @@ export class Dashboard extends Component {
             myTags: "",
             ipfsData: [],
             loading: false,
+            searching: false,
             contractStopped: false,
             contractAddress: "Fetching...",
             searchResult: [],
@@ -75,12 +74,13 @@ export class Dashboard extends Component {
           this.setState({searchResult: []});
           return;
         }
+        this.setState({searching: true});
 
         console.log("Search id is: " + id );
 
         const hash = await getHash(id);
         if(parseInt(hash, 16) === 0) {
-          this.setState({searchResult: []});
+          this.setState({searchResult: [], searching: false});
           return;
         }
 
@@ -95,7 +95,7 @@ export class Dashboard extends Component {
         console.log("search");
         console.log(search);
 
-        this.setState({searchResult: search});
+        this.setState({searchResult: search, searching: false});
         console.log("searchResult");
         console.log(this.state.searchResult);
     }
@@ -162,16 +162,6 @@ export class Dashboard extends Component {
       })
     }
 
-    onDrop2 = async (acceptedFiles, rejectedFiles) => {
-      this.setState({loading: true});
-      var reader = new FileReader();
-      reader.readAsArrayBuffer(acceptedFiles[0]);
-      reader.addEventListener('loadend', () => {
-        const buffer = Buffer.from(reader.result);
-        this.setState({myData: buffer});
-      })
-    }
-
     render() {
         return (
             <div>
@@ -234,6 +224,9 @@ export class Dashboard extends Component {
 
                   {this.state.loading &&
                       <Loader />
+                  }
+                  {this.state.searching &&
+                      <SearchLoader />
                   }
                 </Row>
               </div>
