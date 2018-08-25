@@ -10,7 +10,9 @@ Users can see their records and search for other records by providing the ID of 
 
 ### Tech Stack
 
-Files are stored on **IPFS**. Identity management is handled using **uPort**. And user interface built with **React**. Contract deployed to the **Rinkeby** network at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2)
+Files are stored on **IPFS**. Identity management is handled using **uPort**. And user interface built with **React**. 
+
+Contract imports [Ownable](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) from OpenZeppelin and deployed to the **Rinkeby** network at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2)
 
 -----
 
