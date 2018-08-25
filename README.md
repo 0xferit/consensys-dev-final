@@ -17,8 +17,15 @@ Users can see their records and search for other records by providing the ID of 
 - Deployed to the **Rinkeby** network at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2).
 - Impemented **Emergency Stop** design pattern.
 
------
-
+###  Usage
+#### Prerequisites
+ - Nodejs
+ - Npm
+ - Yarn
+ - Truffle
+ - uPort
+ 
+### Useful Commands
 
 Install dependencies: 
 ```yarn install```
