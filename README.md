@@ -19,6 +19,8 @@ Users can see their records and search for other records by providing the ID of 
 
 ###  Usage
 
+Supported platform is Ubuntu 16.04. Others may or may not work.
+
  - You don't need to `yarn install`. All NodeJs dependencies are pre-installed under *node_modules* folder. 
  - You don't need to `truffle migrate`. All smart contracts compiled and migrated under *src/ethereum/build/* folder.
  
