@@ -38,6 +38,3 @@ Run tests:
 
 Run the app:
 ```yarn start```
-
-To be able to login, you need to install uPort.
-
