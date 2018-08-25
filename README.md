@@ -31,6 +31,8 @@ Install dependencies:
 ```yarn install```
 
 Compile contracts:
+
+```cd src/ethereum/```
 ```truffle compile```
 
 Run tests:
