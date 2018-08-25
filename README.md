@@ -22,7 +22,7 @@ Users can see their records and search for other records by providing the ID of 
  - You don't need to `yarn install`. All NodeJs dependencies are pre-installed under *node_modules* folder. 
  - You don't need to `truffle migrate`. All smart contracts compiled and migrated under *src/ethereum/build/* folder.
  
- **To start web application:** All you need to do is `yarn start` to kick off the app. App will automatically connect to the *ProofOfExistence* contract on Rinkeby.
+ **To start web application:** All you need to do is `yarn start` to kick off the app. The app will automatically connect to the *ProofOfExistence* contract on Rinkeby.
  
  **To run tests:**
   - Start Ganache on port 8545
