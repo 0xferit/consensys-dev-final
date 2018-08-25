@@ -8,7 +8,7 @@ Along with the file, users can optionally provide some tags describing the conte
 
 Users can see their records and search for other records by providing the ID of the record.
 
-### Tech Stack
+### Technical Specifications
 
 - Files are stored on **IPFS**. 
 - Identity management is handled using **uPort**.
