@@ -1,14 +1,42 @@
-### Proof of Existence
+## Proof Of Existence
 
-<br/>• IPFS - Decentralized storage
-<br/>• uPort - Identity management, digitally sign transactions and easy login to DApps.
+### What Good It Does?
+
+This project stores given file along with a timestamp in the smart contract and records are immutable. So this provides an opportunity for users to prove a specific file existed at a certain point in time. 
+
+Along with the file, users can optionally provide some tags describing the content.
+
+Users can see their records and search for other records by providing the ID of the record.
+
+### Technical Specifications
+
+- Files are stored on **IPFS**. 
+- Identity management is handled using **uPort**.
+- User interface built with **React**.
+- **Imports [Ownable](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) library** from OpenZeppelin.
+- Deployed onto the **Rinkeby** network at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://rinkeby.etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2).
+- Impemented **Emergency Stop** design pattern.
+
+###  Usage
+#### Requirements
+ - Nodejs
+ - Npm
+ - Yarn
+ - Truffle
+ - uPort
+ 
+#### Useful Commands
 
 Install dependencies: 
 ```yarn install```
 
+Compile contracts:
+
+```cd src/ethereum/```
+```truffle compile```
+
+Run tests:
+```truffle test```
+
 Run the app:
 ```yarn start```
-
-Build for production:
-```yarn build```
-
