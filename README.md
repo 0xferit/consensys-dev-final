@@ -1,4 +1,6 @@
-### Proof of Existence
+## Proof Of Existence
+
+### What Good It Does?
 
 This project lets users to upload files to create proofs of existences. Upload time is stored in the smart contract and records are immutable.
 
@@ -6,11 +8,12 @@ Along with the file, user can optionally provide some tags describing the conten
 
 Users can see their records and search for other records by providing the ID of the record.
 
-Files are stored on **IPFS**. Identity management is handled using **uPort**. And user interface built with **React**.
+### Tech Stack
+
+Files are stored on **IPFS**. Identity management is handled using **uPort**. And user interface built with **React**. Contract deployed to the **Rinkeby** network at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2)
 
 -----
 
-Deployed on Rinkeby at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2)
 
 Install dependencies: 
 ```yarn install```
