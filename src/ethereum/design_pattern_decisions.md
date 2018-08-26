@@ -11,7 +11,7 @@ I implemented this pattern as it was a project requirement. However it is not ne
 
 ## Owner Pattern
 
-I implemented this as it was required for implementing Emergency Stop pattern. Emergency function should only be called by a privileged party such as a contract owner.
+I implemented this as it was required for implementing Emergency Stop pattern. Emergency functions should only be called by a privileged party such as a contract owner.
 
 ### Speed Bump Pattern
 
