@@ -15,7 +15,7 @@ Users can see their records and search for other records by providing the ID of 
 - User interface built with **React**.
 - **Imports [Ownable](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) library** from OpenZeppelin.
 - Deployed onto the **Rinkeby** network at: [**`0x333D960578E9C7f03081eD6c6F7B4Ea7e6ed0b24`**](https://rinkeby.etherscan.io/address/0x333d960578e9c7f03081ed6c6f7b4ea7e6ed0b24#code).
-- Implemented **Emergency Stop** design pattern.
+- Implements **Emergency Stop** design pattern.
 
 ###  Usage
 
