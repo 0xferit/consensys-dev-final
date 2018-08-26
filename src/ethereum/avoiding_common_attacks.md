@@ -2,7 +2,7 @@
 
 Measures taken to avoid common attacks:
 
-- Tested with %100 statement coverage ([coverage result from solidity-coverage](https://github.com/ferittuncer/consensys-dev-final/blob/master/src/ethereum/coverage/contracts/ProofOfExistence.sol.html))
+- Tested with %100 statement coverage ([coverage result from solidity-coverage](http://htmlpreview.github.io/?https://github.com/ferittuncer/consensys-dev-final/blob/master/src/ethereum/coverage/contracts/ProofOfExistence.sol.html))
 
 - Wrote the contract as simply as possible to avoid bugs. Longest function has 8 statements.
 
