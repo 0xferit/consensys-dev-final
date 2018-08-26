@@ -10,8 +10,7 @@ contract ProofOfExistence is Ownable{
     /**
      * @dev Sets the caller as the owner of the contract.
      */
-    constructor ()
-    {
+    constructor() public {
         owner = msg.sender;
     }
 
