@@ -1,1 +1,1 @@
-ProofOfExistence contract deployed onto the Rinkeby network at: 0x8624f7187ad1e4fe36a403af63165c08c27114a2 
+ProofOfExistence contract deployed onto the Rinkeby network at: 0xd35672f0d7d278cc37B5Fa3Ee4203A24d5e58BA4 
