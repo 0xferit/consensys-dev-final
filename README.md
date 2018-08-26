@@ -14,7 +14,7 @@ Users can see their records and search for other records by providing the ID of 
 - Identity management is handled using **uPort**.
 - User interface built with **React**.
 - **Imports [Ownable](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) library** from OpenZeppelin.
-- Deployed onto the **Rinkeby** network at: [**`0x8624f7187ad1e4fe36a403af63165c08c27114a2`**](https://rinkeby.etherscan.io/address/0x8624f7187ad1e4fe36a403af63165c08c27114a2).
+- Deployed onto the **Rinkeby** network at: [**`0xd35672f0d7d278cc37B5Fa3Ee4203A24d5e58BA4`**](https://rinkeby.etherscan.io/address/0xd35672f0d7d278cc37B5Fa3Ee4203A24d5e58BA4).
 - Implemented **Emergency Stop** design pattern.
 
 ###  Usage
