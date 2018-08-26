@@ -118,13 +118,22 @@ contract('ProofOfExistence', function(accounts) {
   });
 
   /**
-   * This test check whether contract prevents new records when stopped.
+   * This test checks whether contract prevents new records when stopped.
    */
   it('should not let new records when contract stopped', async () => {
     await registry.emergencyStop({from: OWNER});
     assert(await registry.stopped()); // Asserting pre-condition: Contract stopped.
 
     await expectThrow(registry.timestamp(ARBITRARY_CONTENT_1, ARBITRARY_TAGS, {from: USER_3}));
+  });
+
+  /**
+   * This test checks whether it is possible to alter a record by trying to timestamp an existing hash.
+   */
+  it('should revert when trying to timestamp existing hash', async () => {
+    await registry.timestamp(ARBITRARY_CONTENT_1, ARBITRARY_TAGS, {from: OWNER});
+
+    await expectThrow(registry.timestamp(ARBITRARY_CONTENT_1, ARBITRARY_TAGS, {from: OWNER}));
   });
 
 });
