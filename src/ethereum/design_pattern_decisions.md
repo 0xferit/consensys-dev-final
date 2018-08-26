@@ -19,7 +19,7 @@ Again, as there are no unsafe operations, this pattern is not required for this 
  
 ### Mutex Pattern
 
-Timestamp function is vulnerable to concurrent calls. This can be patched applying mutex pattern by avoiding subsequent calls until first call returns. However EVM doesn't let concurrent calls, so this vulnerability is not exploitable.
+Timestamp function is vulnerable to concurrent calls. This can be patched by applying mutex pattern by avoiding subsequent calls until first call returns. However EVM doesn't let concurrent calls, so this vulnerability is not exploitable.
 
 ## Auto Deprecation and Mortal Patterns
 
