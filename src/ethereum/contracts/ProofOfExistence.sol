@@ -1,6 +1,6 @@
-pragma solidity ^0.4.24;
+pragma solidity 0.4.24;
 
-import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /**
  * @title A proof of existence contract that stores decoded IPFS path and tags along with a timestamp as immutable records.
@@ -40,10 +40,10 @@ contract ProofOfExistence is Ownable{
      * @param _hash Decoded IPFS path. To btain the original IPFS path add "1220" as a prefix and encode to base 58.
      * @param _tags Tags as additional details to content.
      */
-    function timestamp(bytes32 _hash, string _tags) onlyWhenNotStopped public returns (uint) {
+    function timestamp(bytes32 _hash, string _tags) public onlyWhenNotStopped returns (uint) {
         uint previousTimestamp = hashToTimestamp[_hash];
-        require (previousTimestamp == 0, 'This hash is already timestamped.');
-        uint id = timestamps.push(block.timestamp) -1;
+        require (previousTimestamp == 0, "This hash is already timestamped.");
+        uint id = timestamps.push(block.timestamp) - 1;
 
         idToHash[id] = _hash;
         hashToTimestamp[_hash] = timestamps[id];
@@ -57,21 +57,21 @@ contract ProofOfExistence is Ownable{
      * @dev Getter function for retrieving all IDs that belongs to given user at once.
      * @param user address for querying IDs
      */
-    function getAllIds(address user) public constant returns (uint256[]) {
+    function getAllIds(address user) public view returns (uint256[]) {
         return userToIds[user];
     }
 
     /**
      * @dev Stopping function of the Emergency Stop pattern. Disables the timestamp function.
      */
-    function emergencyStop() onlyOwner public {
+    function emergencyStop() public onlyOwner {
         stopped = true;
     }
 
     /**
      * @dev Restoring function of the Emergency Stop pattern. Enables the timestamp function.
      */
-    function restoreFromEmergency() onlyOwner public {
+    function restoreFromEmergency() public onlyOwner {
         stopped = false;
     }
 
