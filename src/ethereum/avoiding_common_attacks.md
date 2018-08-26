@@ -4,6 +4,8 @@ Measures I took to avoid common attacks:
 
 - I tested the smart contract with %100 statement coverage (coverage result from solidity-coverage)
 
+- Wrote the contract as simply as possible to avoid bugs. Longest function has 8 statements.
+
 - There is one function that writes to blockchain, timestamp(), so the attack surface is tiny.
 
 - There are no recursive calls and no external calls to avoid possible reentrancy issues.
