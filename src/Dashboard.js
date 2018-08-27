@@ -143,7 +143,7 @@ export class Dashboard extends Component {
         await timestamp(decodeIPFSHash(receipt[0].hash), this.state.myTags, this.props.specificNetworkAddress);
       } catch (error) {
         this.setState({loading: false});
-        alert("There was an error with the transaction.");
+        alert(error);
         console.log(error);
         return;
       }
