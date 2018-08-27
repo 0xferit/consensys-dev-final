@@ -9,7 +9,7 @@ class SearchBar extends Component {
   render(){
     return (
     <div className="search-bar">
-      <input placeholder="Search by ID" value={this.state.term} onChange={event => this.onInputChange(event.target.value)} />
+      <input placeholder="Please type an ID to search. What about 0 or 1?" value={this.state.term} onChange={event => this.onInputChange(event.target.value)} />
     </div>
   );
   }
