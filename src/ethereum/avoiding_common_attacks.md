@@ -1,8 +1,8 @@
 ## Avoiding Common Attacks
 
-Measures I took to avoid common attacks:
+Measures taken to avoid common attacks:
 
-- I tested the smart contract with %100 statement coverage (coverage result from solidity-coverage)
+- Tested with %100 statement coverage ([coverage result from solidity-coverage](http://htmlpreview.github.io/?https://github.com/ferittuncer/consensys-dev-final/blob/master/src/ethereum/coverage/contracts/ProofOfExistence.sol.html))
 
 - Wrote the contract as simply as possible to avoid bugs. Longest function has 8 statements.
 
