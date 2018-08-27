@@ -1,3 +1,6 @@
+Warning: [This update to uPort](https://developer.uport.me/releases) broke sending transaction functionality.
+Until it's fixed you can use [writeContract interface of EtherScan](https://rinkeby.etherscan.io/address/0x333d960578e9c7f03081ed6c6f7b4ea7e6ed0b24#writeContract).
+
 ## Proof Of Existence
 
 ### What Good It Does?
