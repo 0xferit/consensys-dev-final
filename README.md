@@ -1,7 +1,7 @@
 27 Agu 2018 Warning: [This update to uPort](https://developer.uport.me/releases) broke sending transaction functionality.
 Until it's fixed you can use [writeContract interface of EtherScan](https://rinkeby.etherscan.io/address/0x333d960578e9c7f03081ed6c6f7b4ea7e6ed0b24#writeContract).
 
-Details of the problem: TX Hash never appears on Rinkeby network. So transaction doesn't get confirmed. Upload timeouts after 240 seconds.
+Details of the problem: TX Hash never appears on Rinkeby network thus transactions don't get confirmed. Uploads to the app timeout after 240 seconds.
 
 ## Proof Of Existence
 
