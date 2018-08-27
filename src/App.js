@@ -48,7 +48,7 @@ class App extends Component {
 
         <Grid>
           <Row className="grid-row">
-            {this.state.userName.length != 0 ? (
+            {this.state.userName.length !== 0 ? (
               <Dashboard specificNetworkAddress={this.state.specificNetworkAddress} network={this.state.network}/>
             ) : (
                 <Col sm={6} smOffset={3} className="login">
