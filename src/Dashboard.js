@@ -33,7 +33,7 @@ export class Dashboard extends Component {
   }
 
   componentDidMount = async () => {
-    this.myrecords()
+    this.myRecords()
   }
 
   handleSubmit = async (e) => {
@@ -54,7 +54,7 @@ export class Dashboard extends Component {
     this.myRecords();
   }
 
-  myrecords = async () => {
+  myRecords = async () => {
     const contractStopped = await getStopped();
     this.setState({contractStopped, contractAddress: await getContractAddress()});
 
@@ -184,7 +184,7 @@ export class Dashboard extends Component {
                 </div>
           }
           <div>
-            {this.blockchainDisplay(this.state.ipfsData, "myrecords")}
+            {this.blockchainDisplay(this.state.ipfsData, "myRecords")}
           </div>
 
         </Col>
