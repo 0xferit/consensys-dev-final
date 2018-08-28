@@ -1,6 +1,8 @@
-**27 Agu 2018 Warning: Since today, uPort started to fail routing transactions to ethereum network. This broke file upload functionality of the UI. Until it gets back to normal you can use [write contract interface of EtherScan](https://rinkeby.etherscan.io/address/0x333d960578e9c7f03081ed6c6f7b4ea7e6ed0b24#writeContract) to add a new item to the contract storage.**
+~~**27 Agu 2018 Warning: Since today, uPort started to fail routing transactions to ethereum network. This broke file upload functionality of the UI. Until it gets back to normal you can use [write contract interface of EtherScan](https://rinkeby.etherscan.io/address/0x333d960578e9c7f03081ed6c6f7b4ea7e6ed0b24#writeContract) to add a new item to the contract storage.**~~
 
-Details of the problem: TX hashes never appear on Rinkeby network thus transactions don't get confirmed. Uploads to the app timeout after 240 seconds. Read operations unaffected, so search functionality still working as expected.
+~~Details of the problem: TX hashes never appear on Rinkeby network thus transactions don't get confirmed. Uploads to the app timeout after 240 seconds. Read operations unaffected, so search functionality still working as expected.~~
+
+**Update 28 Agu 2018**: Issue is fixed. uPort is functioning again. See here: https://github.com/uport-project/uport-connect/issues/194
 
 ---------
 
