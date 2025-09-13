@@ -3,22 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^1.12.0",
     "bs58": "^4.0.1",
     "ipfs-api": "^24.0.1",
     "ipfs-mini": "^1.1.2",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.21",
     "openzeppelin-solidity": "^1.12.0",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.0",
-    "react-dom": "^16.2.0",
+    "react-dom": "^19.1.1",
     "react-dropzone": "^5.0.1",
     "react-router-dom": "^4.2.2",
     "react-scripts": "^2.0.0-next.3e165448",
     "truffle-contract": "^3.0.2",
     "truffle-hdwallet-provider": "^0.0.3",
     "uport-connect": "^0.7.0",
-    "web3": "^1.0.0-beta.35"
+    "web3": "^4.16.0"
   },
   "scripts": {
     "start": "react-scripts start",
